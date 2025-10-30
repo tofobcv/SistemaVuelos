@@ -1,8 +1,29 @@
-version: '3.8' 
-services: 
-  sistema-vuelos: 
-    build: . 
-    ports: 
-      - "8080:8080" 
-    container_name: sistema-vuelos-completo 
-    restart: unless-stopped 
+version: '3.8'
+services:
+  sistema-vuelos:
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: sistema-vuelos-completo
+    depends_on:
+      - mysql-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/sistema_vuelos
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=gato
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    restart: unless-stopped
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-database
+    environment:
+      - MYSQL_ROOT_PASSWORD=gato
+      - MYSQL_DATABASE=sistema_vuelos
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
