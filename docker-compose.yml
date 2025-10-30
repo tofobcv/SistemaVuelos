@@ -1,0 +1,8 @@
+version: '3.8' 
+services: 
+  sistema-vuelos: 
+    build: . 
+    ports: 
+      - "8080:8080" 
+    container_name: sistema-vuelos-completo 
+    restart: unless-stopped 
